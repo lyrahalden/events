@@ -1,0 +1,15 @@
+{% block title %} Homepage {% endblock %}
+
+{% block content %}
+
+{% for event in events %}
+<div class="container">
+        <h2>{{ event.name.text }}</h2>
+        <p><a href="{{ event.url }}">{{ event.url }}</a></p>
+        <p>Start: {{ event.start.local }}</p>
+        <p>End: {{ event.end.local }}</p>
+        <div>{{ event.description.text }}</div>
+</div>
+{% endfor %}
+
+{% endblock %}
