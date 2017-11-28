@@ -29,6 +29,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 app.jinja_env.undefined = StrictUndefined
 
+
 @app.route("/")
 def index():
     """Display homepage"""
@@ -43,8 +44,11 @@ def search():
     address = request.form.get("address")
     encoded_address = urllib.quote_plus(address)
 
-    events = eventbrite.get("/events/search/?sort_by=distance&location.address=" + encoded_address)
+    events = eventbrite.get("/events/search/?sort_by=distance&location.address=" + encoded_address, expand="venue")
     event_list = events['events']
+    print 'venue' in event_list[0]
+    # returns false -- why??
+    # the venue expansion works fine at https://www.eventbriteapi.com/v3/events/search/?sort_by=distance&location.address=1588+Indiana+St+San+Fransisco&token=CAU24LR6VAMFKGBMPXRW&expand=venue
 
     return render_template("results.html", events=event_list)
 
