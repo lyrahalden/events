@@ -8,6 +8,8 @@ import os
 
 from eventbrite import Eventbrite
 
+import urllib
+
 #get oauth token from env
 EVENTBRITE_OAUTH_TOKEN = os.environ['EVENTBRITE_OAUTH_TOKEN']
 
@@ -27,16 +29,24 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 app.jinja_env.undefined = StrictUndefined
 
-
-@app.route('/')
+@app.route("/")
 def index():
-    """Homepage"""
+    """Display homepage"""
 
-    events = eventbrite.get("/events/search/?sort_by=distance&location.address=450+Sutter+St%2C+San+Francisco%2C+CA")
+    return render_template("homepage.html")
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    """Search for events near you"""
+
+    address = request.form.get("address")
+    encoded_address = urllib.quote_plus(address)
+
+    events = eventbrite.get("/events/search/?sort_by=distance&location.address=" + encoded_address)
     event_list = events['events']
-    print type(event_list)
 
-    return render_template("homepage.html", events=event_list)
+    return render_template("results.html", events=event_list)
 
 if __name__ == "__main__":
 

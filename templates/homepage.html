@@ -1,15 +1,16 @@
+{% extends 'base.html' %}
+
 {% block title %} Homepage {% endblock %}
 
 {% block content %}
 
-{% for event in events %}
-<div class="container">
-        <h2>{{ event.name.text }}</h2>
-        <p><a href="{{ event.url }}">{{ event.url }}</a></p>
-        <p>Start: {{ event.start.local }}</p>
-        <p>End: {{ event.end.local }}</p>
-        <div>{{ event.description.text }}</div>
-</div>
-{% endfor %}
+<h1>Enter your address to search for events near you.</h1>
+
+<form action="/search" method=POST>
+  Address:<br>
+  <input type="text" name="address">
+  <br>
+  <input type="submit" value="Submit">
+</form>
 
 {% endblock %}
